@@ -31,7 +31,7 @@
 | **Syndicats** | Rares mais en forte hausse | 2 titres en 2024 → 51 en 2026 |
 | **Robustesse** | Tendance maintenue à médias constants | +0,83 point par trimestre (p = 0,003) |
 
-<p align="center"><img src="cadrages.png" width="85%" alt="Indicateurs lexicaux par trimestre"></p>
+<p align="center"><img src="png/cadrages.png" width="85%" alt="Indicateurs lexicaux par trimestre"></p>
 
 <a id="s1"></a>
 ## 1. Question et point de départ
@@ -112,7 +112,7 @@ Il passe d'environ 50 titres par mois début 2024 à 100 à 200 par mois en 2026
 | 2026 T1 | 14 | 5 | 17 | 27 | 9 | 167 |
 | 2026 T3 | 14 | 21 | 5 | 31 | 6 | 217 |
 
-<p align="center"><img src="volume_mensuel.png" width="85%" alt="Volume mensuel"><br><sub><i>Volume mensuel</i></sub></p>
+<p align="center"><img src="png/volume_mensuel.png" width="85%" alt="Volume mensuel"><br><sub><i>Volume mensuel</i></sub></p>
 
 ### 4.2 L'indicateur de menace pour l'emploi domine (H2)
 
@@ -122,13 +122,13 @@ Il concerne 15,4 % des titres, contre 5,6 % pour les compétences, 4,4 % pour le
 
 L'indicateur reste sous 5 % des titres en 2024 et 2025. En 2026, il monte à 5,9 % puis 9,4 %, retombe à 4,9 % au troisième trimestre, et atteint environ 10 % en octobre. La hausse n'est pas régulière. Plus de la moitié de ces titres (63 sur 112) mentionnent un syndicat : la hausse reflète donc en grande partie une plus grande présence des syndicats dans les titres, et pas uniquement un débat plus centré sur la négociation.
 
-<p align="center"><img src="cadrages.png" width="85%" alt="Indicateurs lexicaux par trimestre"><br><sub><i>Indicateurs lexicaux par trimestre</i></sub></p>
+<p align="center"><img src="png/cadrages.png" width="85%" alt="Indicateurs lexicaux par trimestre"><br><sub><i>Indicateurs lexicaux par trimestre</i></sub></p>
 
 ### 4.4 Les médias n'abordent pas le sujet de la même façon
 
 L'indicateur de menace représente 35,5 % des titres de BFM, contre 11,1 % pour Le Monde et 11,2 % pour Les Echos. Le Figaro (24,1 %), La Tribune (21,4 %) et Ouest-France (15,3 %) sont entre les deux. Ce sont des pistes, car les effectifs par média sont faibles.
 
-<p align="center"><img src="cadrages_medias.png" width="85%" alt="Indicateurs par média"><br><sub><i>Indicateurs par média</i></sub></p>
+<p align="center"><img src="png/cadrages_medias.png" width="85%" alt="Indicateurs par média"><br><sub><i>Indicateurs par média</i></sub></p>
 
 ### 4.5 Les plans de suppression d'emplois expliquent une partie de la hausse de la menace (H3)
 
@@ -136,7 +136,7 @@ Ils sont cités dans 0 à 5,0 % des titres selon le trimestre (42 titres au tota
 
 Les titres concernés mêlent des plans annoncés par des entreprises (Microsoft, Oracle, Allianz, Société Générale, BNP Paribas) et des projections (« 5 millions d'emplois supprimés d'ici 2030 »).
 
-<p align="center"><img src="hypotheses.png" width="85%" alt="Menace et plans de suppression d'emplois"><br><sub><i>Menace et plans de suppression d'emplois</i></sub></p>
+<p align="center"><img src="png/hypotheses.png" width="85%" alt="Menace et plans de suppression d'emplois"><br><sub><i>Menace et plans de suppression d'emplois</i></sub></p>
 
 ### 4.6 Robustesse de la tendance de l'indicateur de menace
 
@@ -168,7 +168,7 @@ Les titres qui mentionnent un syndicat contiennent moins souvent l'indicateur de
 
 Les titres qui mentionnent un syndicat évoquent plus souvent la négociation que le reste du corpus : 22,7 % contiennent aussi un terme de dialogue, de négociation ou d'accord, contre 2,4 % pour l'ensemble. Mais environ trois titres sur quatre mentionnent un syndicat sans évoquer de négociation. Des accords signés (MAIF, Malakoff Humanis) apparaissent au moins aussi souvent que des titres de contestation (13 titres de négociation contre 8 de contestation en 2026). Les effectifs sont trop faibles pour en tirer une évolution.
 
-<p align="center"><img src="acteurs.png" width="85%" alt="Acteurs mentionnés"><br><sub><i>Acteurs mentionnés</i></sub></p>
+<p align="center"><img src="png/acteurs.png" width="85%" alt="Acteurs mentionnés"><br><sub><i>Acteurs mentionnés</i></sub></p>
 
 ### 4.8 Nuances de l'indicateur de menace
 
