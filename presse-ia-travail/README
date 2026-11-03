@@ -1,0 +1,159 @@
+# IA et travail dans la presse française : exploration computationnelle
+
+Ce travail porte sur les **titres** des articles de presse, pas sur leur texte complet. C'est un projet **exploratoire** : il décrit des tendances dans un corpus, il ne démontre pas de relation causale.
+
+## 1. Question et point de départ
+
+**Question.** Comment la presse française parle-t-elle de l'IA et du travail depuis 2024 ? Quels thèmes et quels acteurs apparaissent dans les titres, et comment évoluent-ils ?
+
+**Origine du projet.** Chez Infusion, j'étais chargée d'études média : je suivais chaque jour une quarantaine de sources sur Orange et les télécoms, et j'analysais les discours des acteurs. J'ai eu le sentiment que le discours médiatique sur l'IA et l'emploi s'emballait. Ce projet teste ce ressenti avec des données.
+
+**Hypothèses.**
+- H1 : le volume de titres retrouvés par mon dispositif de collecte augmente fortement entre 2024 et 2026. **Confirmée**, avec une réserve sur l'indexation de Google Actualités (voir 4.1).
+- H2 : l'indicateur lexical de menace pour l'emploi devient dominant dans les titres. **Confirmée** pour ce qui est de la présence de ces mots (voir 4.2, 4.6 et 4.8). Elle ne dit rien de la tonalité des titres.
+- H3 : l'emballement est lié aux plans de suppression d'emplois. **Partiellement confirmée** : ces plans sont cités dans 0 à 5 % des titres et expliquent environ un tiers de la hausse de la menace en 2025, mais l'essentiel de la hausse reste inexpliqué (voir 4.5).
+
+## 2. Données
+
+**Source.** Flux RSS de Google Actualités, édition France (requêtes en français) : titres, dates, médias et liens.
+
+**Période : janvier 2024 à octobre 2026.**
+- Le début de 2024 donne une base de comparaison avant l'accélération : le corpus compte alors environ 50 titres par mois, contre 100 à 200 en 2026.
+- Il précède aussi de quelques mois l'adoption du règlement européen sur l'IA (AI Act), voté par le Parlement européen le 13 mars 2024 et entré en vigueur le 1er août 2024 (règlement UE 2024/1689).
+- Le choix de 2024 est aussi pratique : trois ans de collecte mois par mois, avec 5 requêtes, restent faisables en quelques minutes.
+- La fin correspond au mois de la collecte. Octobre 2026 est un mois partiel.
+- Limite : commencer en 2024 ne permet pas d'observer l'effet du lancement de ChatGPT (novembre 2022).
+
+**Requêtes (5).**
+- « intelligence artificielle emploi », « intelligence artificielle travail » et « IA salariés » couvrent le cœur du sujet.
+- « IA syndicats » et « IA dialogue social » correspondent à mon intérêt pour la régulation et la négociation collective.
+- Le nombre de requêtes est limité pour des raisons techniques : Google Actualités renvoie peu de résultats par requête, donc je collecte mois par mois, ce qui allonge la collecte.
+
+**Corpus.** 5 923 articles collectés. Après filtrage (titres contenant « IA », « intelligence artificielle » ou « ChatGPT ») et suppression des doublons, il reste 2 865 titres. Parmi eux, 100 (3,5 %) viennent de médias hors de France, principalement québécois : le corpus est très majoritairement français.
+
+## 3. Méthode
+
+1. `collecte.py` : collecte mois par mois et par requête, export en `corpus.csv`.
+2. `analyse.py` : filtrage, suppression des doublons, volume d'articles par mois.
+3. `cadrage.py` : mots les plus fréquents, et part de chaque indicateur lexical par trimestre.
+4. `media.py` : comparaison des indicateurs entre les 6 médias les plus présents, relecture d'échantillons de titres, et part des médias hors de France.
+5. `hypotheses.py` : test de H3 (plans de suppression d'emplois, menace avec et sans ces titres).
+6. `robustesse_h1.py` et `robustesse_H1.py` : volume par média et par trimestre, puis test de robustesse de la tendance de la menace (mêmes médias chaque année, régression avec effets fixes par média).
+7. `acteurs.py` : place des syndicats, des entreprises, des pouvoirs publics et des experts dans les titres.
+8. `nuances_menace.py` : estimation de la part de titres de menace formulés comme une question ou un démenti.
+
+Outils : Python, pandas, scikit-learn, matplotlib, statsmodels (voir `requirements.txt`).
+
+**Note de vocabulaire.** Les « cadrages » de ce projet sont des **indicateurs lexicaux** : ils mesurent la présence de certains mots dans un titre, pas un cadrage médiatique établi au sens de l'analyse de contenu. Par exemple, « L'IA va-t-elle remplacer les salariés ? » et « Pourquoi l'IA ne remplacera pas les salariés » sont comptés tous deux dans l'indicateur de menace, alors que leur sens diffère.
+
+L'indicateur « dialogue social et syndicats » regroupe deux types de titres : ceux qui mentionnent un syndicat (CGT, CFDT, « syndicats »…) et ceux qui parlent de négociation, d'accord ou de dialogue social. Sur 112 titres (hors octobre 2026), 63 (56 %) mentionnent un syndicat. Avec le seul vocabulaire de la négociation (dialogue social, négocia, accord, partenaires sociaux), la part tombe à 2,4 % des titres.
+
+**Biais possibles de cette méthode.**
+- Biais de collecte : Google Actualités choisit et classe les articles, et mes requêtes orientent le corpus.
+- Biais de représentation : les médias sont surtout de grands titres nationaux. Les Echos représente à lui seul environ 11 % du corpus.
+- Biais de mesure : un dictionnaire de mots-clés ne comprend pas le sens d'un titre. Il repère des mots.
+- Biais de format : les titres sont courts et conçus pour attirer l'attention.
+
+## 4. Résultats
+
+**4.1 Le volume de titres retrouvés augmente (H1).** Il passe d'environ 50 titres par mois début 2024 à 100 à 200 par mois en 2026. Cette hausse est visible dans chacun des cinq médias les plus présents : Les Echos passe d'environ 6 à 12 titres par trimestre en 2024 à 27-33 en 2026, et BFM, La Tribune et Ouest-France partent de 0 à 5 titres par trimestre en 2024 pour atteindre 6 à 21 en 2026. Elle ne vient donc pas seulement de l'arrivée de nouveaux médias. En revanche, le nombre de médias différents retrouvés par trimestre double (107 au premier trimestre 2024, 217 au troisième trimestre 2026) : une partie de la hausse reflète un corpus plus large, sans que je puisse séparer ce qui vient de la couverture et ce qui vient de l'indexation de Google Actualités. Je n'interprète donc pas ce volume comme une mesure directe de la couverture médiatique.
+
+| Trimestre | BFM | La Tribune | Le Monde.fr | Les Echos | Ouest-France | Médias différents |
+|---|---|---|---|---|---|---|
+| 2024 T1 | 1 | 1 | 4 | 12 | 1 | 107 |
+| 2025 T1 | 0 | 0 | 11 | 10 | 4 | 125 |
+| 2026 T1 | 14 | 5 | 17 | 27 | 9 | 167 |
+| 2026 T3 | 14 | 21 | 5 | 31 | 6 | 217 |
+
+![Volume mensuel](volume_mensuel.png)
+
+**4.2 L'indicateur de menace pour l'emploi domine (H2).** Il concerne 15,4 % des titres, contre 5,6 % pour les compétences, 4,4 % pour le dialogue social et les syndicats, 3,2 % pour l'opportunité et 1,6 % pour la régulation. Il passe de 8,4 % début 2024 à 24,1 % au dernier trimestre 2025, puis redescend à 16,4 % au troisième trimestre 2026. Cet indicateur compte aussi les titres qui interrogent ou nient la menace : environ 7 titres de menace sur 10 l'affirment, d'après une estimation grossière (voir 4.8).
+
+**4.3 Les syndicats et le dialogue social apparaissent davantage en 2026.** L'indicateur reste sous 5 % des titres en 2024 et 2025. En 2026, il monte à 5,9 % puis 9,4 %, retombe à 4,9 % au troisième trimestre, et atteint environ 10 % en octobre. La hausse n'est pas régulière. Plus de la moitié de ces titres (63 sur 112) mentionnent un syndicat : la hausse reflète donc en grande partie une plus grande présence des syndicats dans les titres, et pas uniquement un débat plus centré sur la négociation.
+
+![Indicateurs lexicaux par trimestre](cadrages.png)
+
+**4.4 Les médias n'abordent pas le sujet de la même façon.** L'indicateur de menace représente 35,5 % des titres de BFM, contre 11,1 % pour Le Monde et 11,2 % pour Les Echos. Le Figaro (24,1 %), La Tribune (21,4 %) et Ouest-France (15,3 %) sont entre les deux. Ce sont des pistes, car les effectifs par média sont faibles.
+
+![Indicateurs par média](cadrages_medias.png)
+
+**4.5 Les plans de suppression d'emplois expliquent une partie de la hausse de la menace (H3).** Ils sont cités dans 0 à 5,0 % des titres selon le trimestre (42 titres au total), et dans 6 % des titres de menace. Entre le premier et le dernier trimestre 2025, la menace passe de 9,2 % à 24,1 % des titres. Sans les titres sur les plans de suppression, elle passe de 9,2 % à 19,6 %. Ces plans expliquent donc environ un tiers de la hausse, et plus de la moitié de la baisse qui suit (de 24,1 % à 16,4 % entre le dernier trimestre 2025 et le troisième trimestre 2026). L'essentiel de la hausse reste à expliquer.
+
+Les titres concernés mêlent des plans annoncés par des entreprises (Microsoft, Oracle, Allianz, Société Générale, BNP Paribas) et des projections (« 5 millions d'emplois supprimés d'ici 2030 »).
+
+![Menace et plans de suppression d'emplois](hypotheses.png)
+
+**4.6 Robustesse de la tendance de l'indicateur de menace.** Pour vérifier que la hausse ne vient pas d'un simple changement de composition des médias, j'ai restreint le corpus aux 107 médias présents en 2024, 2025 et 2026 (1 714 titres). La part de titres contenant l'indicateur de menace y évolue de la même façon que dans le corpus complet.
+
+| Année | Corpus complet | Mêmes médias | Mêmes médias, hors plans de suppression |
+|---|---|---|---|
+| 2024 | 7,6 % | 7,4 % | 7,4 % |
+| 2025 | 16,2 % | 18,9 % | 17,0 % |
+| 2026 | 18,2 % | 18,2 % | 17,7 % |
+
+Une régression avec effets fixes par média (erreurs groupées par média) confirme la tendance : l'indicateur progresse de 0,83 point par trimestre (p = 0,003) en comparant chaque média à lui-même, contre 1,30 point sans effets fixes. Environ un tiers de la pente disparaît donc quand on contrôle le média, et les deux tiers restants correspondent à un changement à l'intérieur des mêmes médias. Retirer les titres sur les plans de suppression ne change presque pas cette pente (0,82 point par trimestre, p = 0,004). Les plans concentrent leurs effets sur quelques trimestres (fin 2025, début 2026), ce qu'une tendance linéaire capte peu : ce résultat ne contredit pas celui de 4.5.
+
+Les effets fixes contrôlent les différences permanentes entre médias. Ils ne contrôlent pas les changements de pratiques éditoriales ni les changements d'indexation de Google Actualités au cours du temps.
+
+**4.7 Acteurs mentionnés dans les titres.** J'ai compté les titres mentionnant quatre familles d'acteurs (dictionnaires de mots-clés, non exclusifs). Une mention dans un titre mesure la présence d'un acteur, pas la parole qui lui est donnée dans l'article.
+
+| Année | Syndicats | Entreprises | Pouvoirs publics | Experts et études |
+|---|---|---|---|---|
+| 2024 | 0,4 % | 8,1 % | 1,9 % | 7,2 % |
+| 2025 | 1,5 % | 13,8 % | 3,0 % | 5,0 % |
+| 2026 (janvier à septembre) | 3,9 % | 20,7 % | 4,5 % | 8,5 % |
+
+Les entreprises sont l'acteur le plus mentionné et leur part passe de 8,1 % à 20,7 %. Les syndicats restent rares (66 titres au total, dont 2 en 2024, 13 en 2025 et 51 en 2026), mais leur part est multipliée par dix. En 2026, les entreprises sont mentionnées environ cinq fois plus souvent que les syndicats.
+
+Les titres qui mentionnent un syndicat contiennent moins souvent l'indicateur de menace (7,6 %, soit 5 titres sur 66) que l'ensemble du corpus (15,5 %). C'est aussi le cas des titres qui mentionnent les pouvoirs publics (6,3 %). À l'inverse, les titres qui mentionnent des entreprises (20,5 %) ou des experts et études (20,7 %) sont plus souvent associés à la menace. Pour les entreprises, ce lien est en partie mécanique : les titres sur les plans de suppression citent à la fois une entreprise et un terme de suppression.
+
+Les titres qui mentionnent un syndicat évoquent plus souvent la négociation que le reste du corpus : 22,7 % contiennent aussi un terme de dialogue, de négociation ou d'accord, contre 2,4 % pour l'ensemble. Mais environ trois titres sur quatre mentionnent un syndicat sans évoquer de négociation. Des accords signés (MAIF, Malakoff Humanis) apparaissent au moins aussi souvent que des titres de contestation (13 titres de négociation contre 8 de contestation en 2026). Les effectifs sont trop faibles pour en tirer une évolution.
+
+![Acteurs mentionnés](acteurs.png)
+
+**4.8 Nuances de l'indicateur de menace.** Sur les 420 titres qui contiennent l'indicateur de menace (hors octobre 2026), 21,0 % sont formulés comme une question et 8,8 % contiennent un démenti ou une protection (« ne remplacera pas », « aucun licenciement »). Les titres qui ne relèvent ni de l'un ni de l'autre représentent 71,2 % (environ 1 % des titres sont à la fois une question et un démenti). Ces titres affirment donc le plus souvent une menace : la hausse de l'indicateur ne s'explique pas seulement par des questions ou des démentis. La part de titres affirmatifs augmente entre 2024 (27 à 67 % selon les trimestres) et 2025-2026 (64 à 88 %), tandis que celle des questions diminue (de 22-64 % en 2024 à 4-21 % depuis le deuxième trimestre 2025). Les trimestres de 2024 reposent sur une dizaine de titres de menace chacun : cette évolution est indicative.
+
+Cette estimation repose sur des listes de mots simples et sur la présence d'un point d'interrogation. Sur un échantillon de 10 titres relus, environ 6 « questions » sont de vraies questions ouvertes (les autres affirment ou nient la menace malgré le point d'interrogation), et environ 8 « démentis » nient vraiment la menace. Les erreurs vont dans les deux sens : le chiffre de 71 % est un ordre de grandeur.
+
+## 5. Limites
+
+Les limites sont classées par importance pour la validité des résultats.
+
+**Limites fortes.**
+- **Les dictionnaires ne sont pas validés.** Aucun codage manuel d'un échantillon aléatoire n'a été fait : précision, rappel et F1-score ne sont pas calculés. Ils ont été contrôlés par relecture de petits échantillons de 10 titres : environ 6 à 7 pertinents pour la menace, 10 sur 10 pour le dialogue social, 9 sur 10 pour les syndicats (un « syndicat des eaux » est un faux positif), 5 sur 10 pour les plans annoncés par des entreprises. Ces échantillons sont trop petits pour estimer la fiabilité des indicateurs : les résultats sont exploratoires.
+- **Une seule source de collecte.** Le corpus dépend de Google Actualités (édition France) et de mes requêtes. Je n'ai pas pu comparer avec une autre source (base de presse, archives des médias), donc je ne sais pas quelle part des tendances vient de l'algorithme de Google.
+- **Les indicateurs mesurent des mots, pas un sens.** Un titre qui interroge ou nie la menace (« L'IA ne remplacera jamais l'humain ») compte dans l'indicateur de menace. Environ 30 % des titres de menace sont des questions ou des démentis d'après une estimation grossière (4.8). Les mots « licencier » ou « remplacer » ont aussi plusieurs sens, et l'indicateur ne se limite pas à l'emploi (« L'IA ne remplacera jamais l'intelligence humaine » y est comptée).
+
+**Limites moyennes.**
+- Deux requêtes contiennent « syndicats » et « dialogue social » (liées à mon intérêt pour la régulation). Elles gonflent la part de ce thème : la tendance dans le temps reste lisible, pas le niveau absolu.
+- L'indicateur « dialogue social et syndicats » est en grande partie un indicateur de présence syndicale (56 % des titres concernés mentionnent un syndicat).
+- Les dictionnaires d'acteurs sont non exhaustifs, en particulier celui des entreprises. Les parts d'acteurs sont probablement sous-estimées. Un acteur mentionné dans un titre n'est pas forcément celui qui parle dans l'article.
+- Les médias sont surtout de grands médias nationaux, donc la représentation est partielle.
+- Le dictionnaire des plans de suppression regroupe des annonces réelles et des projections.
+
+**Limites liées aux effectifs.**
+- Le dernier trimestre ne couvre qu'octobre et il est exclu des tests de H3, des acteurs et de 4.8.
+- Le nombre de titres par média et par trimestre est faible (0 à 33 pour les cinq médias les plus présents). Les plans de suppression ne représentent que 42 titres, et les titres avec syndicats 66 (dont 2 en 2024).
+- Les comparaisons entre médias reposent sur 56 à 187 titres par média.
+- Le test de robustesse repose sur une tendance linéaire par trimestre et sur des médias présents sur toute la période. Les p-values sont à lire comme des indices.
+
+## 6. Positionnement et suite
+
+**Positionnement.** Ce projet est un travail exploratoire personnel. Il montre qu'on peut construire un corpus, le coder, tester des hypothèses et en documenter les limites. Il n'a pas la robustesse d'une publication scientifique, faute de validation des indicateurs et de seconde source de données.
+
+**Suite possible, par priorité.**
+
+| Priorité | Limite visée | Piste |
+|---|---|---|
+| 1 | Dictionnaires non validés | Codage manuel de 200 titres tirés au hasard, calcul de la précision, du rappel et du F1-score, puis révision des dictionnaires. Idéalement avec un deuxième codeur et un coefficient de Cohen. |
+| 2 | Source unique | Comparer avec une autre collecte (base de presse comme Europresse, ou archives de médias), pour séparer l'effet de l'indexation de celui de la couverture. |
+| 3 | Mots et non sens | Valider et affiner la distinction entre menace affirmée, question et démenti (estimée à 71 %, 21 % et 9 % en 4.8), puis coder la tonalité (codage manuel, puis classification supervisée ou modèle de thèmes). |
+| 4 | Acteurs | Passer des mentions dans les titres aux acteurs qui parlent dans le texte des articles, et à leur association avec la négociation, la contestation ou la régulation. |
+| 5 | Période et médias | Étendre à 2022-2023 (effet du lancement de ChatGPT) et à d'autres médias francophones (Suisse, Belgique, Québec). |
+| 6 | Explication de la hausse | Examiner les annonces de grandes entreprises, les études sur l'IA et l'emploi, les déclarations de dirigeants, et le récit selon lequel l'IA serait une excuse pour justifier des licenciements. |
+
+## 7. Lien avec mes recherches
+
+Je m'intéresse au travail et à l'IA, et en particulier au rôle du dialogue social. Ici, je déplace ce regard vers les médias : comment le débat public présente l'IA aux salariés, aux syndicats et aux entreprises, et quelle place y prennent les acteurs du dialogue social.
+
+Ce projet fait émerger une question de recherche, sans la tester : dans quelle mesure le discours médiatique sur l'IA forme-t-il un environnement dans lequel les acteurs du dialogue social construisent leurs interprétations et leurs stratégies de régulation ? Les données actuelles décrivent le discours médiatique. Elles ne montrent aucun lien avec ce que font les acteurs du dialogue social.
